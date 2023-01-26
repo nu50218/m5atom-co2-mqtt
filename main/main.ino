@@ -57,11 +57,15 @@ void setup() {
     delay(500);
   }
 
+  retry = 0;
   if (!mqtt_client.connect(mqtt_server, mqtt_port)) {
+    if (retry == 5) {
+      ESP.restart();
+    }
     Serial.print("MQTT connection failed! Error code = ");
     Serial.println(mqtt_client.connectError());
-    while (1)
-      ;
+    retry++;
+    delay(500);
   }
 }
 
